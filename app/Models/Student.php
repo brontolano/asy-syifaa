@@ -34,9 +34,19 @@ class Student extends Model
         return $this->belongsTo(ErpAccount::class, 'erp_account_id');
     }
 
+    public function waliAccount(): BelongsTo
+    {
+        return $this->belongsTo(ErpAccount::class, 'wali_account_id');
+    }
+
     public function registration(): BelongsTo
     {
         return $this->belongsTo(PpdbRegistration::class, 'ppdb_registration_id');
+    }
+
+    public function enrolledFromPpdb(): BelongsTo
+    {
+        return $this->belongsTo(PpdbRegistration::class, 'enrolled_from_ppdb_id');
     }
 
     public function invoices(): HasMany

@@ -35,4 +35,13 @@ return [
         ],
     ],
 
+    'n8n' => [
+        'base_url' => env('N8N_BASE_URL', env('N8N_WEBHOOK_URL')),
+        'webhook_secret' => env('N8N_WEBHOOK_SECRET'),
+    ],
+
+    'sso' => [
+        'website_login_url' => env('WEBSITE_LOGIN_URL', 'https://asy-syifaa.com/login'),
+    ],
+
 ];

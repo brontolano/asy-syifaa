@@ -2,6 +2,10 @@
 
 use App\Http\Controllers\Api\SpmbRegisterController;
 use App\Http\Controllers\Api\SpmbSyncController;
+use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\GalleryController;
+use App\Http\Controllers\Api\V1\PostController;
+use App\Http\Controllers\Api\V1\PpdbPublicController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -56,4 +60,33 @@ Route::prefix('v1/spmb')->group(function () {
     Route::post('/register', [SpmbRegisterController::class, 'register']);
     Route::get('/{registrationNumber}/status', [SpmbRegisterController::class, 'status']);
     Route::get('/{registrationNumber}/documents', [SpmbRegisterController::class, 'documents']);
+});
+
+// ── Public API v1 ──────────────────────────────────────────────
+Route::prefix('v1')->group(function () {
+    // Health
+    Route::get('/health', fn () => response()->json([
+        'ok' => true,
+        'service' => 'erp-pesantren-api',
+        'time' => now()->toISOString(),
+    ]));
+
+    // CMS — public
+    Route::get('/posts', [PostController::class, 'index']);
+    Route::get('/posts/{slug}', [PostController::class, 'show']);
+    Route::get('/galleries', [GalleryController::class, 'index']);
+    Route::get('/galleries/{slug}', [GalleryController::class, 'show']);
+
+    // PPDB — public
+    Route::get('/ppdb/status/{registrationNumber}', [PpdbPublicController::class, 'status']);
+    Route::get('/ppdb/selection-results', [PpdbPublicController::class, 'selectionResults']);
+
+    // Auth
+    Route::post('/auth/login', [AuthController::class, 'login']);
+
+    // Auth — protected
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('/auth/me', [AuthController::class, 'me']);
+        Route::post('/auth/logout', [AuthController::class, 'logout']);
+    });
 });

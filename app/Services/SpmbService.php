@@ -13,6 +13,7 @@ use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\PpdbDocument;
 use App\Models\PpdbRegistration;
+use App\Models\Student;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -166,9 +167,31 @@ class SpmbService
     public function convertToSantri(PpdbRegistration $registration): void
     {
         $account = $registration->account;
+
+        // Create Student record from registration data
+        $student = Student::create([
+            'nis' => $registration->registration_number,
+            'full_name' => $registration->student_name,
+            'birth_place' => $registration->birth_place ?? '',
+            'birth_date' => $registration->birth_date,
+            'gender' => $registration->gender ?? 'L',
+            'address' => $registration->address ?? '',
+            'erp_account_id' => $account?->id,
+            'wali_account_id' => $account?->id,
+            'ppdb_registration_id' => $registration->id,
+            'enrolled_from_ppdb_id' => $registration->id,
+            'status' => 'aktif',
+            'entry_year' => $registration->academic_year ?? date('Y'),
+            'ayah_nama' => $registration->father_name ?? $registration->parent_name ?? '',
+            'ayah_no_telepon' => $registration->parent_phone ?? '',
+            'ibu_nama' => $registration->mother_name ?? '',
+            'wali_status' => 'Ayah Kandung',
+        ]);
+
+        // Change role: Pendaftar → Wali Santri
         if ($account) {
             $account->removeRole('Pendaftar');
-            $account->assignRole('Santri');
+            $account->assignRole('Wali Santri');
         }
 
         $registration->update(['status' => 'enrolled']);

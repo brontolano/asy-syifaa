@@ -77,4 +77,20 @@ class ErpAccount extends Authenticatable implements FilamentUser, HasName
     {
         return 'erp';
     }
+
+    /**
+     * Santri linked to this account as Wali.
+     */
+    public function santriAsWali(): HasMany
+    {
+        return $this->hasMany(Student::class, 'wali_account_id');
+    }
+
+    /**
+     * CMS posts authored by this account.
+     */
+    public function cmsPosts(): HasMany
+    {
+        return $this->hasMany(CmsPost::class, 'author_id');
+    }
 }

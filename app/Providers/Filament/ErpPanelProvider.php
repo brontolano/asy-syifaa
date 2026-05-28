@@ -45,6 +45,8 @@ class ErpPanelProvider extends PanelProvider
                 'Kepesantrenan',
                 'Keuangan',
                 'SPMB',
+                'CMS Website',
+                'Notifikasi',
                 'Pengguna',
                 'Pengaturan',
             ])

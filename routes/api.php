@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\GalleryController;
 use App\Http\Controllers\Api\V1\PostController;
 use App\Http\Controllers\Api\V1\PpdbPublicController;
+use App\Http\Controllers\Api\V1\WaliController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -88,5 +89,18 @@ Route::prefix('v1')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/auth/me', [AuthController::class, 'me']);
         Route::post('/auth/logout', [AuthController::class, 'logout']);
+    });
+
+    // ── Wali App (app.asy-syifaa.com) — protected ──────────────
+    Route::prefix('wali')->middleware('auth:sanctum')->group(function () {
+        Route::get('/santri', [WaliController::class, 'santri']);
+        Route::prefix('santri/{studentId}')->group(function () {
+            Route::get('/status-harian',                       [WaliController::class, 'statusHarian']);
+            Route::get('/hafalan',                             [WaliController::class, 'hafalan']);
+            Route::get('/tagihan',                             [WaliController::class, 'tagihan']);
+            Route::post('/tagihan/{invoiceId}/bukti-bayar',    [WaliController::class, 'uploadBuktiBayar']);
+            Route::get('/izin',                                [WaliController::class, 'daftarIzin']);
+            Route::post('/izin',                               [WaliController::class, 'ajukanIzin']);
+        });
     });
 });

@@ -11,11 +11,12 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
 class ErpAccount extends Authenticatable implements FilamentUser, HasName
 {
-    use HasFactory, HasRoles, Notifiable, SoftDeletes;
+    use HasApiTokens, HasFactory, HasRoles, Notifiable, SoftDeletes;
 
     protected $table = 'erp_accounts';
 
@@ -27,6 +28,10 @@ class ErpAccount extends Authenticatable implements FilamentUser, HasName
         'password',
         'is_active',
         'must_change_password',
+        'last_login_at',
+        'last_login_ip',
+        'failed_login_count',
+        'locked_until',
     ];
 
     /**

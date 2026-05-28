@@ -15,6 +15,7 @@ use App\Listeners\SendAllDocsVerifiedNotification;
 use App\Listeners\SendDocumentRejectedNotification;
 use App\Listeners\SendRegistrationWebhook;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -32,6 +33,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        URL::forceScheme('https');
+
         Event::listen(SpmbRegistered::class, SendRegistrationWebhook::class);
         Event::listen(DocumentVerified::class, SendDocumentRejectedNotification::class);
         Event::listen(AllDocumentsVerified::class, SendAllDocsVerifiedNotification::class);

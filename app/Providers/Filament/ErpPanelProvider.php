@@ -81,6 +81,7 @@ class ErpPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+                \App\Http\Middleware\RedirectWaliToPwa::class,
                 \App\Http\Middleware\ForcePasswordChange::class,
             ])
             ->viteTheme('resources/css/filament/theme.css')

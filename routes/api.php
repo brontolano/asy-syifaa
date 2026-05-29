@@ -95,12 +95,33 @@ Route::prefix('v1')->group(function () {
     Route::prefix('wali')->middleware('auth:sanctum')->group(function () {
         Route::get('/santri', [WaliController::class, 'santri']);
         Route::prefix('santri/{studentId}')->group(function () {
+            // Status
             Route::get('/status-harian',                       [WaliController::class, 'statusHarian']);
-            Route::get('/hafalan',                             [WaliController::class, 'hafalan']);
+
+            // Keuangan
             Route::get('/tagihan',                             [WaliController::class, 'tagihan']);
             Route::post('/tagihan/{invoiceId}/bukti-bayar',    [WaliController::class, 'uploadBuktiBayar']);
+            Route::get('/tabungan',                            [WaliController::class, 'tabungan']);
+            Route::post('/tabungan/limit',                     [WaliController::class, 'setLimitTabungan']);
+            Route::post('/tabungan/freeze',                    [WaliController::class, 'freezeTabungan']);
+            Route::get('/transaksi',                           [WaliController::class, 'transaksi']);
+
+            // Akademik & Hafalan
+            Route::get('/hafalan',                             [WaliController::class, 'hafalan']);
+            Route::get('/jadwal',                              [WaliController::class, 'jadwal']);
+            Route::get('/absensi',                             [WaliController::class, 'absensi']);
+            Route::get('/akademik',                            [WaliController::class, 'akademik']);
+            Route::get('/prestasi',                            [WaliController::class, 'prestasi']);
+
+            // Kegiatan
             Route::get('/izin',                                [WaliController::class, 'daftarIzin']);
             Route::post('/izin',                               [WaliController::class, 'ajukanIzin']);
+            Route::get('/kesehatan',                           [WaliController::class, 'kesehatan']);
+            Route::get('/kunjungan',                           [WaliController::class, 'daftarKunjungan']);
+            Route::post('/kunjungan',                          [WaliController::class, 'ajukanKunjungan']);
+            Route::get('/konseling',                           [WaliController::class, 'daftarKonseling']);
+            Route::post('/konseling',                          [WaliController::class, 'ajukanKonseling']);
+            Route::get('/presensi',                            [WaliController::class, 'presensi']);
         });
     });
 });

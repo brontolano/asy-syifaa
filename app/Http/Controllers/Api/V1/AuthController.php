@@ -110,8 +110,12 @@ class AuthController extends Controller
 
     protected function getRedirectUrl(array $roles): string
     {
-        // All roles redirect to ERP
-        $erpUrl = config('app.url', 'https://erp.asy-syifaa.com');
-        return $erpUrl;
+        // Wali santri → PWA app
+        if (in_array('wali_santri', $roles)) {
+            return config('app.pwa_url', 'https://app.asy-syifaa.com');
+        }
+
+        // Semua role lain → ERP admin
+        return config('app.url', 'https://erp.asy-syifaa.com');
     }
 }

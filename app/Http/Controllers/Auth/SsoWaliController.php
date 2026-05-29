@@ -16,9 +16,7 @@ class SsoWaliController extends Controller
             return redirect(Filament::getLoginUrl());
         }
 
-        $isWali = $user->hasRole('wali_santri')
-               || $user->hasRole('orang_tua')
-               || $user->hasRole('wali');
+        $isWali = $user->hasAnyRole(['wali_santri', 'orang_tua', 'wali', 'Wali Santri']);
 
         if (!$isWali) {
             return redirect(Filament::getUrl());

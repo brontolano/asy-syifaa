@@ -23,17 +23,12 @@
         <div class="bg-gradient-to-br from-emerald-600 via-emerald-500 to-teal-400 p-6">
             <div class="flex flex-col md:flex-row items-center gap-6">
 
-                {{-- Icon Aplikasi --}}
+                {{-- Icon Aplikasi (self-contained, tanpa file gambar eksternal) --}}
                 <div class="flex-shrink-0">
-                    <div class="w-28 h-28 md:w-32 md:h-32 rounded-3xl bg-white shadow-2xl flex items-center justify-center border-4 border-white/30">
-                        <img
-                            src="{{ asset('images/favicon.png') }}"
-                            alt="Asy-Syifaa App"
-                            class="w-20 h-20 md:w-24 md:h-24 object-contain rounded-2xl"
-                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                        >
-                        <div style="display:none" class="w-20 h-20 md:w-24 md:h-24 items-center justify-center">
-                            <x-heroicon-o-device-phone-mobile class="w-14 h-14 text-emerald-500" />
+                    <div class="w-28 h-28 md:w-32 md:h-32 rounded-[1.75rem] bg-white shadow-2xl flex items-center justify-center border-4 border-white/40 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-br from-emerald-50 to-teal-100"></div>
+                        <div class="relative w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br from-emerald-600 to-teal-500 flex items-center justify-center shadow-inner">
+                            <x-heroicon-s-academic-cap class="w-9 h-9 md:w-11 md:h-11 text-white" />
                         </div>
                     </div>
                 </div>

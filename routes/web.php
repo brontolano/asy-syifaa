@@ -1,11 +1,15 @@
 <?php
 
 use App\Http\Controllers\PublicVerificationController;
+use App\Http\Controllers\Auth\SsoWaliController;
 use Illuminate\Support\Facades\Route;
 
 // Public verification page (accessible via QR code scan or manual search)
 Route::get('/verifikasi', [PublicVerificationController::class, 'index'])->name('public.verifikasi');
 Route::get('/verifikasi/{registrationNumber}', [PublicVerificationController::class, 'show'])->where('registrationNumber', '.*')->name('public.verifikasi.show');
+
+// SSO redirect wali → PWA (authenticated via erp guard)
+Route::middleware(['auth:erp'])->get('/auth/sso-wali', [SsoWaliController::class, 'redirect'])->name('auth.sso-wali');
 
 // PDF Routes (authenticated via erp guard)
 Route::middleware(['auth:erp'])->prefix('pdf')->name('pdf.')->group(function () {

@@ -9,6 +9,20 @@ class Dashboard extends BaseDashboard
     public static function canAccess(): bool
     {
         $user = auth('erp')->user();
-        return $user && !$user->hasAnyRole(['Pendaftar', 'Santri', 'Wali Santri']);
+
+        // Wali punya halaman sendiri (WaliPortal), tidak perlu akses Dashboard ERP
+        // Pendaftar & Santri juga tidak perlu Dashboard ERP
+        if (! $user) {
+            return false;
+        }
+
+        return ! $user->hasAnyRole([
+            'Pendaftar',
+            'Santri',
+            'Wali Santri',
+            'wali_santri',
+            'orang_tua',
+            'wali',
+        ]);
     }
 }

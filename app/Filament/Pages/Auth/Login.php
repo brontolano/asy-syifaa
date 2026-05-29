@@ -2,8 +2,8 @@
 
 namespace App\Filament\Pages\Auth;
 
-use Filament\Auth\Pages\Login as BaseLogin;
 use Filament\Auth\Http\Responses\Contracts\LoginResponse;
+use Filament\Auth\Pages\Login as BaseLogin;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Component;
 use Illuminate\Validation\ValidationException;
@@ -11,7 +11,7 @@ use Illuminate\Validation\ValidationException;
 class Login extends BaseLogin
 {
     /**
-     * Override: use login_id field that accepts both phone and username.
+     * Override: gunakan field login_id yang menerima username atau nomor HP.
      */
     protected function getEmailFormComponent(): Component
     {
@@ -25,13 +25,12 @@ class Login extends BaseLogin
     }
 
     /**
-     * Override: detect if input is phone or username, then find the right credential.
+     * Override: deteksi apakah input adalah nomor HP atau username.
      */
     protected function getCredentialsFromFormData(array $data): array
     {
         $loginId = trim($data['login_id']);
 
-        // If starts with 0 or + or is all digits → treat as phone number
         if (preg_match('/^[\d\+][\d\-\s]+$/', $loginId)) {
             $phone = preg_replace('/[\s\-]/', '', $loginId);
             return [
@@ -47,48 +46,36 @@ class Login extends BaseLogin
     }
 
     /**
-     * Override: after successful login, redirect wali_santri / orang_tua to PWA app with SSO token.
-     * All other roles proceed normally to ERP dashboard.
-     */
-    public function authenticate(): ?LoginResponse
-    {
-        $response = parent::authenticate();
-
-        $user = auth('erp')->user();
-
-        if ($user) {
-            $isWali = $user->hasRole('wali_santri')
-                    || $user->hasRole('orang_tua')
-                    || $user->hasRole('wali');
-
-            if ($isWali) {
-                // Buat token Sanctum khusus untuk SSO ke PWA
-                $token = $user->createToken('pwa-sso')->plainTextToken;
-
-                $pwaUrl      = rtrim(config('app.pwa_url', 'https://app.asy-syifaa.com'), '/');
-                $redirectUrl = $pwaUrl . '?sso_token=' . urlencode($token);
-
-                // Hapus sesi ERP — wali tidak perlu akses ERP
-                auth('erp')->logout();
-                session()->invalidate();
-                session()->regenerateToken();
-
-                $this->redirect($redirectUrl, navigate: false);
-                return null;
-            }
-        }
-
-        // Role lain: lanjut ke dashboard ERP seperti biasa
-        return $response;
-    }
-
-    /**
-     * Override: throw error on the login_id field.
+     * Override: tampilkan error di field login_id.
      */
     protected function throwFailureValidationException(): never
     {
         throw ValidationException::withMessages([
             'data.login_id' => 'Username/Nomor HP atau password salah.',
         ]);
+    }
+
+    /**
+     * Override authenticate: setelah login berhasil, redirect wali ke WaliPortal.
+     * Staff/admin lanjut ke panel ERP seperti biasa.
+     */
+    public function authenticate(): ?LoginResponse
+    {
+        $result = parent::authenticate();
+
+        // Null = MFA challenge atau gagal, kembalikan saja
+        if ($result === null) {
+            return null;
+        }
+
+        $user = auth('erp')->user();
+
+        if ($user && $user->hasAnyRole(['wali_santri', 'orang_tua', 'wali', 'Wali Santri'])) {
+            // Redirect ke WaliPortal menggunakan Livewire's $this->redirect()
+            $this->redirect(route('filament.erp.pages.wali-portal'));
+            return null;
+        }
+
+        return $result;
     }
 }

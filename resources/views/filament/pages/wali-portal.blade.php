@@ -25,11 +25,8 @@
 
                 {{-- Icon Aplikasi (self-contained, tanpa file gambar eksternal) --}}
                 <div class="flex-shrink-0">
-                    <div class="w-28 h-28 md:w-32 md:h-32 rounded-[1.75rem] bg-white shadow-2xl flex items-center justify-center border-4 border-white/40 relative overflow-hidden">
-                        <div class="absolute inset-0 bg-gradient-to-br from-emerald-50 to-teal-100"></div>
-                        <div class="relative w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br from-emerald-600 to-teal-500 flex items-center justify-center shadow-inner">
-                            <x-heroicon-s-academic-cap class="w-9 h-9 md:w-11 md:h-11 text-white" />
-                        </div>
+                    <div class="w-28 h-28 md:w-32 md:h-32 rounded-[1.75rem] bg-white shadow-2xl flex items-center justify-center border-4 border-white/40">
+                        <x-heroicon-s-academic-cap class="w-16 h-16 md:w-20 md:h-20 text-emerald-600" />
                     </div>
                 </div>
 

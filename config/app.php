@@ -17,6 +17,15 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | PWA App URL
+    |--------------------------------------------------------------------------
+    | URL aplikasi PWA wali santri. Digunakan untuk SSO redirect setelah login
+    | dari ERP jika user berperan sebagai wali_santri.
+    */
+    'pwa_url' => env('PWA_URL', 'https://app.asy-syifaa.com'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Environment
     |--------------------------------------------------------------------------
     |

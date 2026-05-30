@@ -9,8 +9,13 @@ class PaymentProof extends Model
 {
     protected $fillable = [
         'invoice_id',
+        'student_id',
         'erp_account_id',
         'file_path',
+        'nominal_transfer',
+        'tanggal_transfer',
+        'bank_pengirim',
+        'nama_pengirim',
         'notes',
         'status',
         'rejection_reason',
@@ -21,13 +26,20 @@ class PaymentProof extends Model
     protected function casts(): array
     {
         return [
-            'reviewed_at' => 'datetime',
+            'reviewed_at'      => 'datetime',
+            'tanggal_transfer' => 'date',
+            'nominal_transfer' => 'decimal:2',
         ];
     }
 
     public function invoice(): BelongsTo
     {
         return $this->belongsTo(Invoice::class);
+    }
+
+    public function student(): BelongsTo
+    {
+        return $this->belongsTo(Student::class);
     }
 
     public function uploader(): BelongsTo

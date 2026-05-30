@@ -37,22 +37,46 @@ class PaymentMethodResource extends Resource
                         ->unique(ignoreRecord: true)
                         ->maxLength(30)
                         ->helperText('Contoh: cash, transfer_bsi, transfer_bca, qris'),
+                    Forms\Components\Select::make('type')
+                        ->label('Tipe')
+                        ->options([
+                            'bank'    => 'Transfer Bank / Virtual Account',
+                            'ewallet' => 'E-Wallet',
+                            'qris'    => 'QRIS',
+                        ])
+                        ->default('bank')
+                        ->required()
+                        ->live(),
                     Forms\Components\TextInput::make('name')
                         ->label('Nama Tampilan')
                         ->required()
                         ->helperText('Contoh: Tunai, Transfer BSI, Transfer BCA'),
                     Forms\Components\TextInput::make('bank_name')
-                        ->label('Nama Bank')
+                        ->label('Nama Bank / Penyedia')
                         ->helperText('Kosongkan jika cash/tunai'),
                     Forms\Components\TextInput::make('account_number')
-                        ->label('Nomor Rekening')
-                        ->helperText('Kosongkan jika cash/tunai'),
+                        ->label('Nomor Rekening / VA / Nomor E-Wallet')
+                        ->helperText('Kosongkan jika cash/tunai/QRIS')
+                        ->visible(fn (Forms\Get $get) => $get('type') !== 'qris'),
                     Forms\Components\TextInput::make('account_holder')
                         ->label('Atas Nama'),
+                    Forms\Components\FileUpload::make('qris_image_path')
+                        ->label('Gambar QRIS')
+                        ->image()
+                        ->disk('public')
+                        ->directory('payment-methods')
+                        ->maxSize(2048)
+                        ->helperText('Upload gambar QR statis dari penyedia QRIS')
+                        ->visible(fn (Forms\Get $get) => $get('type') === 'qris'),
                     Forms\Components\TextInput::make('icon')
                         ->label('Icon')
                         ->default('heroicon-o-banknotes')
                         ->helperText('Heroicon name'),
+                    Forms\Components\Textarea::make('instructions')
+                        ->label('Instruksi Pembayaran')
+                        ->rows(3)
+                        ->columnSpanFull()
+                        ->helperText('Petunjuk tambahan untuk wali (opsional)'),
                     Forms\Components\Toggle::make('is_active')
                         ->label('Aktif')
                         ->default(true),
@@ -69,6 +93,7 @@ class PaymentMethodResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('code')->label('Kode')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('type')->label('Tipe')->badge()->placeholder('-'),
                 Tables\Columns\TextColumn::make('name')->label('Nama')->searchable(),
                 Tables\Columns\TextColumn::make('bank_name')->label('Bank')->placeholder('-'),
                 Tables\Columns\TextColumn::make('account_number')->label('No. Rekening')->placeholder('-'),

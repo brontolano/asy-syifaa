@@ -190,13 +190,13 @@ class WaliController extends Controller
     {
         $this->authorizeStudent($request, $studentId);
 
-        $request->validate([
-            'foto'            => 'required|image|max:5120',
-            'nominal'         => 'required|numeric|min:1000',
-            'tanggal_transfer'=> 'required|date',
-            'bank_pengirim'   => 'nullable|string|max:50',
-            'nama_pengirim'   => 'nullable|string|max:100',
-            'catatan'         => 'nullable|string|max:500',
+        $validated = $request->validate([
+            'foto'             => 'required|image|max:5120',
+            'nominal_transfer' => 'required|numeric|min:1000',
+            'tanggal_transfer' => 'required|date',
+            'bank_pengirim'    => 'nullable|string|max:50',
+            'nama_pengirim'    => 'nullable|string|max:100',
+            'catatan'          => 'nullable|string|max:500',
         ]);
 
         $invoice = Invoice::where('id', $invoiceId)
@@ -210,8 +210,8 @@ class WaliController extends Controller
             'student_id'       => $studentId,
             'erp_account_id'   => $request->user()->id,
             'file_path'        => $path,
-            'nominal_transfer' => $request->nominal,
-            'tanggal_transfer' => $request->tanggal_transfer,
+            'nominal_transfer' => $validated['nominal_transfer'],
+            'tanggal_transfer' => $validated['tanggal_transfer'],
             'bank_pengirim'    => $request->bank_pengirim,
             'nama_pengirim'    => $request->nama_pengirim,
             'notes'            => $request->catatan,
@@ -228,6 +228,37 @@ class WaliController extends Controller
             'message' => 'Bukti transfer berhasil dikirim. Menunggu konfirmasi admin.',
             'data'    => ['id' => $proof->id, 'status' => $proof->status],
         ], 201);
+    }
+
+    /**
+     * GET /api/v1/wali/santri/{studentId}/payment-methods
+     * Daftar metode pembayaran aktif (VA bank, e-wallet, QRIS).
+     */
+    public function paymentMethods(Request $request, int $studentId): JsonResponse
+    {
+        $this->authorizeStudent($request, $studentId);
+
+        $methods = \App\Models\PaymentMethod::active()
+            ->get()
+            ->map(fn($m) => [
+                'id'             => $m->id,
+                'code'           => $m->code,
+                'type'           => $m->type ?? 'bank',
+                'name'           => $m->name,
+                'bank_name'      => $m->bank_name,
+                'account_number' => $m->account_number,
+                'account_holder' => $m->account_holder,
+                'icon'           => $m->icon,
+                'qris_image_url' => $m->qris_image_path
+                    ? Storage::disk('public')->url($m->qris_image_path)
+                    : null,
+                'instructions'   => $m->instructions,
+            ]);
+
+        return response()->json([
+            'ok'   => true,
+            'data' => $methods->values(),
+        ]);
     }
 
     /**

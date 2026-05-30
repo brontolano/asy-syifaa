@@ -101,6 +101,7 @@ Route::prefix('v1')->group(function () {
             // Keuangan
             Route::get('/tagihan',                             [WaliController::class, 'tagihan']);
             Route::post('/tagihan/{invoiceId}/bukti-bayar',    [WaliController::class, 'uploadBuktiBayar']);
+            Route::get('/payment-methods',                     [WaliController::class, 'paymentMethods']);
             Route::get('/tabungan',                            [WaliController::class, 'tabungan']);
             Route::post('/tabungan/limit',                     [WaliController::class, 'setLimitTabungan']);
             Route::post('/tabungan/freeze',                    [WaliController::class, 'freezeTabungan']);

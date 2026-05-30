@@ -117,9 +117,9 @@ class StudentResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema->components([
-            Forms\Components\Tabs::make('Student')
+            \Filament\Schemas\Components\Tabs::make('Student')
                 ->tabs([
-                    Forms\Components\Tabs\Tab::make('Identitas Akademik')
+                    \Filament\Schemas\Components\Tabs\Tab::make('Identitas Akademik')
                         ->icon('heroicon-o-academic-cap')
                         ->schema([
                             Forms\Components\TextInput::make('nis')->label('NIS')->required(),
@@ -144,7 +144,7 @@ class StudentResource extends Resource
                             Forms\Components\Select::make('jalur_masuk')->label('Jalur Masuk')
                                 ->options(['reguler' => 'Reguler', 'yatim' => 'Yatim', 'beasiswa' => 'Beasiswa', 'tahfidz' => 'Tahfidz']),
                         ])->columns(3),
-                    Forms\Components\Tabs\Tab::make('Data Pribadi')
+                    \Filament\Schemas\Components\Tabs\Tab::make('Data Pribadi')
                         ->icon('heroicon-o-user')
                         ->schema([
                             Forms\Components\TextInput::make('birth_place')->label('Tempat Lahir'),
@@ -158,7 +158,7 @@ class StudentResource extends Resource
                             Forms\Components\TextInput::make('pendidikan_terakhir')->label('Pendidikan Terakhir'),
                             Forms\Components\TextInput::make('kebutuhan_khusus')->label('Kebutuhan Khusus'),
                         ])->columns(2),
-                    Forms\Components\Tabs\Tab::make('Keluarga & Domisili')
+                    \Filament\Schemas\Components\Tabs\Tab::make('Keluarga & Domisili')
                         ->icon('heroicon-o-home')
                         ->schema([
                             Forms\Components\TextInput::make('no_kk')->label('No. KK'),
@@ -172,7 +172,7 @@ class StudentResource extends Resource
                             Forms\Components\TextInput::make('provinsi')->label('Provinsi'),
                             Forms\Components\TextInput::make('kode_pos')->label('Kode Pos'),
                         ])->columns(2),
-                    Forms\Components\Tabs\Tab::make('Ayah')
+                    \Filament\Schemas\Components\Tabs\Tab::make('Ayah')
                         ->icon('heroicon-o-user')
                         ->schema([
                             Forms\Components\TextInput::make('ayah_nama')->label('Nama Ayah'),
@@ -186,7 +186,7 @@ class StudentResource extends Resource
                             Forms\Components\TextInput::make('ayah_penghasilan')->label('Penghasilan'),
                             Forms\Components\Textarea::make('ayah_alamat')->label('Alamat'),
                         ])->columns(2),
-                    Forms\Components\Tabs\Tab::make('Ibu')
+                    \Filament\Schemas\Components\Tabs\Tab::make('Ibu')
                         ->icon('heroicon-o-user')
                         ->schema([
                             Forms\Components\TextInput::make('ibu_nama')->label('Nama Ibu'),
@@ -200,7 +200,7 @@ class StudentResource extends Resource
                             Forms\Components\TextInput::make('ibu_penghasilan')->label('Penghasilan'),
                             Forms\Components\Textarea::make('ibu_alamat')->label('Alamat'),
                         ])->columns(2),
-                    Forms\Components\Tabs\Tab::make('Wali')
+                    \Filament\Schemas\Components\Tabs\Tab::make('Wali')
                         ->icon('heroicon-o-user-group')
                         ->schema([
                             Forms\Components\TextInput::make('wali_status')->label('Hubungan Wali'),
@@ -215,7 +215,7 @@ class StudentResource extends Resource
                             Forms\Components\Textarea::make('wali_alamat')->label('Alamat'),
                             Forms\Components\TextInput::make('yang_membiayai')->label('Yang Membiayai'),
                         ])->columns(2),
-                    Forms\Components\Tabs\Tab::make('Catatan & Keuangan')
+                    \Filament\Schemas\Components\Tabs\Tab::make('Catatan & Keuangan')
                         ->icon('heroicon-o-currency-dollar')
                         ->schema([
                             Forms\Components\TextInput::make('spp_amount')->label('Nominal SPP')

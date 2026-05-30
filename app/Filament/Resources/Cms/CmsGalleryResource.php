@@ -31,7 +31,7 @@ class CmsGalleryResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema->components([
-            Forms\Components\Section::make('Informasi Galeri')
+            \Filament\Schemas\Components\Section::make('Informasi Galeri')
                 ->schema([
                     Forms\Components\TextInput::make('title')
                         ->label('Judul Galeri')
@@ -66,7 +66,7 @@ class CmsGalleryResource extends Resource
                     Forms\Components\Hidden::make('author_id')
                         ->default(fn () => auth('erp')->id()),
                 ])->columns(2),
-            Forms\Components\Section::make('Foto-foto')
+            \Filament\Schemas\Components\Section::make('Foto-foto')
                 ->schema([
                     Forms\Components\Repeater::make('items')
                         ->relationship()

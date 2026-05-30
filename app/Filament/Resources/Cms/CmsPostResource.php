@@ -32,7 +32,7 @@ class CmsPostResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema->components([
-            Forms\Components\Section::make('Konten')
+            \Filament\Schemas\Components\Section::make('Konten')
                 ->schema([
                     Forms\Components\TextInput::make('title')
                         ->label('Judul')
@@ -72,7 +72,7 @@ class CmsPostResource extends Resource
                         ->rows(3)
                         ->columnSpanFull(),
                 ])->columns(2),
-            Forms\Components\Section::make('Media & Status')
+            \Filament\Schemas\Components\Section::make('Media & Status')
                 ->schema([
                     Forms\Components\FileUpload::make('featured_image')
                         ->label('Gambar Utama')

@@ -6,6 +6,7 @@ use App\Models\PaymentMethod;
 use Filament\Actions;
 use Filament\Forms;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -29,7 +30,7 @@ class PaymentMethodResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema->components([
-            Forms\Components\Section::make('Informasi Metode Pembayaran')
+            \Filament\Schemas\Components\Section::make('Informasi Metode Pembayaran')
                 ->schema([
                     Forms\Components\TextInput::make('code')
                         ->label('Kode')
@@ -57,7 +58,7 @@ class PaymentMethodResource extends Resource
                     Forms\Components\TextInput::make('account_number')
                         ->label('Nomor Rekening / VA / Nomor E-Wallet')
                         ->helperText('Kosongkan jika cash/tunai/QRIS')
-                        ->visible(fn (Forms\Get $get) => $get('type') !== 'qris'),
+                        ->visible(fn (Get $get) => $get('type') !== 'qris'),
                     Forms\Components\TextInput::make('account_holder')
                         ->label('Atas Nama'),
                     Forms\Components\FileUpload::make('qris_image_path')
@@ -67,7 +68,7 @@ class PaymentMethodResource extends Resource
                         ->directory('payment-methods')
                         ->maxSize(2048)
                         ->helperText('Upload gambar QR statis dari penyedia QRIS')
-                        ->visible(fn (Forms\Get $get) => $get('type') === 'qris'),
+                        ->visible(fn (Get $get) => $get('type') === 'qris'),
                     Forms\Components\TextInput::make('icon')
                         ->label('Icon')
                         ->default('heroicon-o-banknotes')

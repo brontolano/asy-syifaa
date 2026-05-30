@@ -29,7 +29,7 @@ class CmsCategoryResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema->components([
-            Forms\Components\Section::make('Kategori')
+            \Filament\Schemas\Components\Section::make('Kategori')
                 ->schema([
                     Forms\Components\TextInput::make('name')->label('Nama')->required(),
                     Forms\Components\TextInput::make('slug')->label('Slug')->required()->unique(ignoreRecord: true),

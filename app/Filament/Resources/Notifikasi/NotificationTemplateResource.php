@@ -29,7 +29,7 @@ class NotificationTemplateResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema->components([
-            Forms\Components\Section::make('Template')
+            \Filament\Schemas\Components\Section::make('Template')
                 ->schema([
                     Forms\Components\TextInput::make('name')->label('Nama Template')->required(),
                     Forms\Components\TextInput::make('slug')->label('Slug')->required()->unique(ignoreRecord: true),

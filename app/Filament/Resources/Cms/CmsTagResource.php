@@ -29,7 +29,7 @@ class CmsTagResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema->components([
-            Forms\Components\Section::make('Tag')
+            \Filament\Schemas\Components\Section::make('Tag')
                 ->schema([
                     Forms\Components\TextInput::make('name')->label('Nama')->required(),
                     Forms\Components\TextInput::make('slug')->label('Slug')->required()->unique(ignoreRecord: true),

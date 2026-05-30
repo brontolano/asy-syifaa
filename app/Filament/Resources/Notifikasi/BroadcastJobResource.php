@@ -30,7 +30,7 @@ class BroadcastJobResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema->components([
-            Forms\Components\Section::make('Broadcast')
+            \Filament\Schemas\Components\Section::make('Broadcast')
                 ->schema([
                     Forms\Components\TextInput::make('name')
                         ->label('Nama Broadcast')

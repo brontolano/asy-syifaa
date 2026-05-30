@@ -29,7 +29,7 @@ class LetterHeaderResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema->components([
-            Forms\Components\Section::make('Identitas Lembaga')
+            \Filament\Schemas\Components\Section::make('Identitas Lembaga')
                 ->schema([
                     Forms\Components\TextInput::make('name')
                         ->label('Nama Template')
@@ -48,7 +48,7 @@ class LetterHeaderResource extends Resource
                     Forms\Components\TextInput::make('email')->label('Email'),
                     Forms\Components\TextInput::make('website')->label('Website'),
                 ])->columns(2),
-            Forms\Components\Section::make('Logo')
+            \Filament\Schemas\Components\Section::make('Logo')
                 ->schema([
                     Forms\Components\FileUpload::make('logo_path')
                         ->label('Logo Utama (Kiri)')
@@ -61,7 +61,7 @@ class LetterHeaderResource extends Resource
                         ->directory('letter-headers')
                         ->maxSize(1024),
                 ])->columns(2),
-            Forms\Components\Section::make('Pengaturan')
+            \Filament\Schemas\Components\Section::make('Pengaturan')
                 ->schema([
                     Forms\Components\Toggle::make('is_default')
                         ->label('Jadikan Default')

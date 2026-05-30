@@ -416,6 +416,47 @@ class WaliController extends Controller
     }
 
     /**
+     * POST /api/v1/wali/santri/{studentId}/tabungan/topup
+     * Setor saldo ke tabungan santri (upload bukti transfer / QRIS).
+     * Saldo baru masuk setelah admin memverifikasi bukti.
+     */
+    public function topupTabungan(Request $request, int $studentId): JsonResponse
+    {
+        $this->authorizeStudent($request, $studentId);
+
+        $validated = $request->validate([
+            'foto'             => 'required|image|max:5120',
+            'nominal_transfer' => 'required|numeric|min:10000',
+            'tanggal_transfer' => 'required|date',
+            'bank_pengirim'    => 'nullable|string|max:50',
+            'nama_pengirim'    => 'nullable|string|max:100',
+            'catatan'          => 'nullable|string|max:500',
+        ]);
+
+        $path = $request->file('foto')->store('payment-proofs', 'public');
+
+        $proof = PaymentProof::create([
+            'type'             => 'topup',
+            'invoice_id'       => null,
+            'student_id'       => $studentId,
+            'erp_account_id'   => $request->user()->id,
+            'file_path'        => $path,
+            'nominal_transfer' => $validated['nominal_transfer'],
+            'tanggal_transfer' => $validated['tanggal_transfer'],
+            'bank_pengirim'    => $request->bank_pengirim,
+            'nama_pengirim'    => $request->nama_pengirim,
+            'notes'            => $request->catatan,
+            'status'           => 'pending',
+        ]);
+
+        return response()->json([
+            'ok'      => true,
+            'message' => 'Bukti setoran berhasil dikirim. Saldo akan ditambahkan setelah dikonfirmasi admin.',
+            'data'    => ['id' => $proof->id, 'status' => $proof->status],
+        ], 201);
+    }
+
+    /**
      * GET /api/v1/wali/santri/{studentId}/transaksi
      * Riwayat transaksi tabungan.
      */

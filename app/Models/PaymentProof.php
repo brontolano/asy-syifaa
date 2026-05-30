@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class PaymentProof extends Model
 {
     protected $fillable = [
+        'type',
         'invoice_id',
         'student_id',
         'erp_account_id',

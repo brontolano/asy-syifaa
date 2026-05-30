@@ -105,6 +105,7 @@ Route::prefix('v1')->group(function () {
             Route::get('/tabungan',                            [WaliController::class, 'tabungan']);
             Route::post('/tabungan/limit',                     [WaliController::class, 'setLimitTabungan']);
             Route::post('/tabungan/freeze',                    [WaliController::class, 'freezeTabungan']);
+            Route::post('/tabungan/topup',                     [WaliController::class, 'topupTabungan']);
             Route::get('/transaksi',                           [WaliController::class, 'transaksi']);
 
             // Akademik & Hafalan

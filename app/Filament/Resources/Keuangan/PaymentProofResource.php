@@ -57,13 +57,22 @@ class PaymentProofResource extends Resource
                     ->label('Bukti')
                     ->disk('public')
                     ->height(48),
+                Tables\Columns\TextColumn::make('type')
+                    ->label('Tipe')
+                    ->badge()
+                    ->formatStateUsing(fn (?string $state) => match ($state) {
+                        'topup' => 'Setor Tabungan',
+                        default => 'Tagihan',
+                    })
+                    ->color(fn (?string $state) => $state === 'topup' ? 'info' : 'gray'),
                 Tables\Columns\TextColumn::make('student.full_name')
                     ->label('Santri')
                     ->searchable()
                     ->placeholder('-'),
                 Tables\Columns\TextColumn::make('invoice.invoice_number')
                     ->label('No. Tagihan')
-                    ->searchable(),
+                    ->searchable()
+                    ->placeholder('— (setoran)'),
                 Tables\Columns\TextColumn::make('nominal_transfer')
                     ->label('Nominal')
                     ->money('IDR')
@@ -119,7 +128,9 @@ class PaymentProofResource extends Resource
                     ->visible(fn (PaymentProof $r) => $r->status === 'pending')
                     ->requiresConfirmation()
                     ->modalHeading('Setujui Bukti Transfer')
-                    ->modalDescription('Pembayaran akan dicatat & sisa tagihan dilunasi. Lanjutkan?')
+                    ->modalDescription(fn (PaymentProof $r) => $r->type === 'topup'
+                        ? 'Saldo tabungan santri akan ditambahkan sesuai nominal setoran. Lanjutkan?'
+                        : 'Pembayaran akan dicatat & sisa tagihan dilunasi. Lanjutkan?')
                     ->action(function (PaymentProof $record) {
                         $record->update([
                             'status'      => 'approved',

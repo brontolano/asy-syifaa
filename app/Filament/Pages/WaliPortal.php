@@ -7,9 +7,9 @@ use Illuminate\Contracts\Support\Htmlable;
 
 class WaliPortal extends Page
 {
-    protected static string $view = 'filament.pages.wali-portal';
+    protected string $view = 'filament.pages.wali-portal';
 
-    protected static ?string $navigationIcon = 'heroicon-o-device-phone-mobile';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-device-phone-mobile';
 
     protected static ?string $navigationLabel = 'Portal Wali';
 
